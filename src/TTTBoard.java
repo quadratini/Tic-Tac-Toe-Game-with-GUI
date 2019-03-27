@@ -37,7 +37,7 @@ public class TTTBoard {
     * can be obtained from the board using the get method.
     * the class can also check if there is a winner by
     * checking through the rows and coloums for characters
-    * in a row.
+    * in a row. 
     *
     * @throws IllegalArgumentException if size is less than 1.
     */
