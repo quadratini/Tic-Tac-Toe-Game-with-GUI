@@ -1,8 +1,9 @@
 public class TTTDriver {
 
     public static void main(String[] args) {
-    
-        TTTVisual dong = new TTTVisual();
+
+        TTTBoard board = new TTTBoard(5);
+        TTTVisual dong = new TTTVisual(board);
 
 
     }
