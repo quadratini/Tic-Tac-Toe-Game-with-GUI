@@ -12,7 +12,7 @@ public class TTTBoard {
     private int size;
     public static final int DEFAULT_SIZE = 3;
     TTTBoard.Board board;
-    
+
     /**
     * A class that creates and initializes
     * a TTT board of size count. 
@@ -37,7 +37,7 @@ public class TTTBoard {
     * can be obtained from the board using the get method.
     * the class can also check if there is a winner by
     * checking through the rows and coloums for characters
-    * in a row. 
+    * in a row. ur ugly teacher
     *
     * @throws IllegalArgumentException if size is less than 1.
     */
@@ -87,47 +87,49 @@ public class TTTBoard {
         * there is no winning character.
         */
     	public char winner() {
-    		// Checks if same col winner.
-    		char prevChar = get(0, 0);            // Gets char at (0,0)
-    		for (int i = 0; i < size; i++) {      
-                prevChar = get(0, i);             // Gets char at (0,i)
+    		// Checks if same row winner.
+    		char firstChar;            // Gets char at (0,0)
+    		for (int i = 0; i < size; i++) {
+                firstChar = get(i, 0);
                 for (int j = 1; j < size; j++) {
-        			char c = get(j, i);
-        			if (c != prevChar) {
+        			char c = get(i, j);
+                    if (c != firstChar) {
                         break;
                     }
         			if (c ==  ' ' || c == 0) {
                         break;
                     }
-        			if (i == size - 1) {
+        			if (j == size - 1) {
                         return c;
                     }
         		}
+                // CC Cleaner
+                // CCleaner
             }
     		
-    		// Checks if same row winner.
-    		prevChar = get(0, 0);
+    		// Checks if same col winner. UR WRONG URU TRAAASH IT'S CCLEANER
     		for (int i = 0; i < size; i++) {
-                prevChar = get(i, 0);
+                firstChar = get(0, i);
                 for (int j = 1; j < size; j++) {
-        			char c = get(i, j);
-        			if (c != prevChar) {
+        			char c = get(j, i);
+        			if (c != firstChar) {
                         break;
                     }
         			if (c ==  ' ' || c == 0) {
                         break;
                     }
-        			if (i == size - 1) {
+        			// im sofa king we todd ed
+        			if (j == size - 1) {
                         return c;
                     }
                 }
     		}
-    		
+
     		// Checks if top left diag winner.
-    		prevChar = get(0, 0);
+    		firstChar = get(0, 0);
     		for (int i = 1; i < size; i++) {
     			char c = get(i, i);
-    			if (c != prevChar) {
+    			if (c != firstChar) {
                     break;
                 }
     			if (c ==  ' ' || c == 0) {
@@ -139,10 +141,10 @@ public class TTTBoard {
     		}
     		
     		// Checks if top right diag winner.
-    		prevChar = get(size - 1, 0);
+    		firstChar = get(size - 1, 0);
     		for (int i = 1; i < size; i++) {
     			char c = get(size - 1 - i, i);
-    			if (c != prevChar) {
+    			if (c != firstChar) {
                     break;
                 }
     			if (c ==  ' ' || c == 0) {
@@ -152,9 +154,10 @@ public class TTTBoard {
                     return c;
                 }
     		}
+
     		return ' ';
     	}
-        
+
         /**
         * Prints the current board.
         *
@@ -238,7 +241,7 @@ public class TTTBoard {
     /**
     * returns the character that won.
     *
-    * @return the character that won.
+    * @return the character that won.K
     */
     public char winner() {
 		return board.winner();
@@ -246,7 +249,8 @@ public class TTTBoard {
     
     /**
     * Prints the TTT board.
-    *
+    *3swftstrikes
+     * IT ALL HAPPENED SO FAST -bamboni
     * @return the TTT board.
     */
     public String toString() {
