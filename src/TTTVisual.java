@@ -7,13 +7,15 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class TTTVisual {
-    ArrayList<Image> sexImages; //u know what it is
-    TTTBoard board;
-    int size;
-    JFrame frame;
-    JPanel panel;
-    char xo = 'O';
-    int click = 0;
+    private ArrayList<Image> sexImages; //u know what it is
+    private TTTBoard board;
+    private JLabel turn;
+    private JFrame frame;
+    private JPanel panel;
+    private JButton reset;
+    private char xo = 'O';
+    private int click = 0;
+    private int size;
 
     public TTTVisual(TTTBoard board) {
         this.board = board;
@@ -36,7 +38,6 @@ public class TTTVisual {
 
                 int co = row;
                 int r = col;
-
                 button.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -46,23 +47,25 @@ public class TTTVisual {
                             } else {
                                 xo = 'X';
                             }
+
+                            if (xo == 'O') {
+                                turn.setText("X turn");
+                            } else {
+                                turn.setText("O turn");
+                            }
                             button.setText(xo + "");
                             board.set(r,co,xo);
 
                             char win = board.winner();
-                            // it's me. bambi's earlobe
                             Color bambisEarlobe = new Color(196,157,131);
                             Color toru = new Color(153,138,174);
                             if (win == 'X') {
                                 panel.setBackground(bambisEarlobe);
-                            }
-                            // i know what i have to do
-
-                            else if (win == 'O') {
+                            } else if (win == 'O') {
                                 panel.setBackground(toru);
-
-                            } else panel.setBackground(Color.black // beotiful
-                            );
+                            } else if (click == (size * size - 1)) { // FOR TIE
+                                panel.setBackground(Color.red);
+                            }
                         }
                         click++;
                         button.setEnabled(false);
@@ -99,18 +102,26 @@ public class TTTVisual {
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
-        c.gridy = 0;
-        c.weightx = 1;
-        c.weighty = 1;
+        c.gridy = 1;
         c.anchor = GridBagConstraints.NORTHWEST;
-
-        panel.setBackground(Color.BLACK);
+        panel.setBackground(Color.white);
 
         addComponentsToPane(panel);
         frame.setLayout(new GridBagLayout());
         frame.add(panel, c);
 
-        frame.setSize(500,500);
+        turn = new JLabel();
+        Font labelFont = turn.getFont();
+        turn.setText("O turn");
+        c.gridy = 0;
+        turn.setFont(new Font(labelFont.getName(), Font.PLAIN, 20));
+        frame.add(turn, c);
+
+        reset = new JButton("Reset");
+        c.gridy = 2;
+        frame.add(reset, c);
+
+        frame.setSize(600,600);
         frame.setVisible(true);
     }
 
@@ -124,7 +135,6 @@ public class TTTVisual {
                     int none = 0;
                     frame.setIconImage(sexImages.get(timesIBanegedHer % timesIBangedLoren + none));
                     ++timesIBanegedHer; //yes!!
-                    // she IS u  a sexy monkey with liptick on.  chimps can be hot still sexy ape to bear ur children
                     try {
                         Thread.sleep(50);
                     } catch (Exception e) {
