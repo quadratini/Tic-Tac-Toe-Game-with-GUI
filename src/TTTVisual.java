@@ -16,6 +16,7 @@ public class TTTVisual {
     private char xo = 'O';
     private int click = 0;
     private int size;
+    JButton[][] buttons;
 
     public TTTVisual(TTTBoard board) {
         this.board = board;
@@ -27,10 +28,14 @@ public class TTTVisual {
     public void addComponentsToPane(JPanel panel) {
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(2,2,2,2);
+        buttons = new JButton[size][size];
+
+
 
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 JButton button = new JButton();
+                buttons[row][col] = button;
                 button.setPreferredSize(new Dimension(50,50));
                 c.gridx = row;
                 c.gridy = col;
@@ -59,12 +64,22 @@ public class TTTVisual {
                             char win = board.winner();
                             Color bambisEarlobe = new Color(196,157,131);
                             Color toru = new Color(153,138,174);
-                            if (win == 'X') {
-                                panel.setBackground(bambisEarlobe);
-                            } else if (win == 'O') {
-                                panel.setBackground(toru);
-                            } else if (click == (size * size - 1)) { // FOR TIE
-                                panel.setBackground(Color.red);
+                            if (win != ' ') {
+                                if (win == 'X') {
+                                    panel.setBackground(bambisEarlobe);
+                                    turn.setText("X wins");
+                                } else if (win == 'O') {
+                                    panel.setBackground(toru);
+                                    turn.setText("O wins");
+                                } else if (click == (size * size - 1)) { // FOR TIE
+                                    panel.setBackground(Color.red);
+                                    turn.setText("Draw");
+                                }
+                                for (int i = 0; i < size; ++i) {
+                                    for (int j = 0; j < size; ++j) {
+                                        buttons[i][j].setEnabled(false);
+                                    }
+                                }
                             }
                         }
                         click++;
@@ -72,6 +87,8 @@ public class TTTVisual {
                     }
                 });
             }
+
+
         }
     }
 
@@ -103,7 +120,6 @@ public class TTTVisual {
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 1;
-        c.anchor = GridBagConstraints.NORTHWEST;
         panel.setBackground(Color.white);
 
         addComponentsToPane(panel);
@@ -118,6 +134,20 @@ public class TTTVisual {
         frame.add(turn, c);
 
         reset = new JButton("Reset");
+        reset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int i = 0; i < size; ++i) {
+                    for (int j = 0; j < size; ++j) {
+                        board.set(i, j, ' ');
+                        buttons[i][j].setText(" ");
+                        buttons[i][j].setEnabled(true);
+                        turn.setText("O turn");
+                        click = 0;
+                    }
+                }
+            }
+        });
         c.gridy = 2;
         frame.add(reset, c);
 
