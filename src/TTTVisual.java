@@ -11,19 +11,16 @@ public class TTTVisual {
     private TTTBoard board;
     private JLabel turn;
     private JFrame frame;
-    private JPanel panel;
-    private JButton reset;
     private char xo = 'O';
     private int click = 0;
     private int size;
-    JButton[][] buttons;
+    private JButton[][] buttons;
     private ArrayList<File> sounds;
 
     private void playRandomSound() {
         if (sounds == null) {
             sounds = new ArrayList<>();
             File dir = new File("good/sex");
-            int cnt = 0;
             for (File file : dir.listFiles()) {
                 if (file.getName().endsWith(".wav")) {
                     sounds.add(file);
@@ -47,8 +44,6 @@ public class TTTVisual {
         c.insets = new Insets(2,2,2,2);
         buttons = new JButton[size][size];
 
-
-
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 JButton button = new JButton();
@@ -60,6 +55,7 @@ public class TTTVisual {
 
                 int co = row;
                 int r = col;
+
                 button.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -72,9 +68,9 @@ public class TTTVisual {
                             }
 
                             if (xo == 'O') {
-                                turn.setText("X turn");
+                                turn.setText("X's move");
                             } else {
-                                turn.setText("O turn");
+                                turn.setText("O's move");
                             }
                             button.setText(xo + "");
                             board.set(r,co,xo);
@@ -82,17 +78,21 @@ public class TTTVisual {
                             char win = board.winner();
                             Color bambisEarlobe = new Color(196,157,131);
                             Color toru = new Color(153,138,174);
+
+                            if (click == (size * size - 1)) { // FOR TIE
+                                panel.setBackground(Color.red);
+                                turn.setText("Draw");
+                            }
+
                             if (win != ' ') {
                                 if (win == 'X') {
                                     panel.setBackground(bambisEarlobe);
                                     turn.setText("X wins");
-                                } else if (win == 'O') {
+                                } else {
                                     panel.setBackground(toru);
                                     turn.setText("O wins");
-                                } else if (click == (size * size - 1)) { // FOR TIE
-                                    panel.setBackground(Color.red);
-                                    turn.setText("Draw");
                                 }
+
                                 for (int i = 0; i < size; ++i) {
                                     for (int j = 0; j < size; ++j) {
                                         buttons[i][j].setEnabled(false);
@@ -105,13 +105,12 @@ public class TTTVisual {
                     }
                 });
             }
-
-
         }
     }
 
     // draws the frame
     private void initFrame() {
+
         frame = new JFrame("Tic-Tac-Toe");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         sexImages = new ArrayList<>();
@@ -128,9 +127,9 @@ public class TTTVisual {
             e.printStackTrace();
         }
 
-        panel = new JPanel(new GridBagLayout()) {
-        @Override
-            public Dimension getPreferredSize () {
+        JPanel panel = new JPanel(new GridBagLayout()) {
+            @Override
+            public Dimension getPreferredSize() {
                 return new Dimension(400, 400);
             }
         };
@@ -138,7 +137,7 @@ public class TTTVisual {
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 1;
-        panel.setBackground(Color.white);
+        panel.setBackground(Color.BLACK);
 
         addComponentsToPane(panel);
         frame.setLayout(new GridBagLayout());
@@ -146,12 +145,12 @@ public class TTTVisual {
 
         turn = new JLabel();
         Font labelFont = turn.getFont();
-        turn.setText("O turn");
+        turn.setText("O's move");
         c.gridy = 0;
         turn.setFont(new Font(labelFont.getName(), Font.PLAIN, 20));
         frame.add(turn, c);
 
-        reset = new JButton("Reset");
+        JButton reset = new JButton("Reset");
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -160,7 +159,7 @@ public class TTTVisual {
                         board.set(i, j, ' ');
                         buttons[i][j].setText(" ");
                         buttons[i][j].setEnabled(true);
-                        turn.setText("O turn");
+                        turn.setText("O's move");
                         click = 0;
                     }
                 }
