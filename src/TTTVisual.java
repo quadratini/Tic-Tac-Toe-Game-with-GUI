@@ -17,6 +17,23 @@ public class TTTVisual {
     private int click = 0;
     private int size;
     JButton[][] buttons;
+    private ArrayList<File> sounds;
+
+    private void playRandomSound() {
+        if (sounds == null) {
+            sounds = new ArrayList<>();
+            File dir = new File("good/sex");
+            int cnt = 0;
+            for (File file : dir.listFiles()) {
+                if (file.getName().endsWith(".wav")) {
+                    sounds.add(file);
+                }
+            }
+        }
+
+        int rand = (int)(Math.random() * sounds.size());
+        SoundManager.playSound(sounds.get(rand));
+    }
 
     public TTTVisual(TTTBoard board) {
         this.board = board;
@@ -47,6 +64,7 @@ public class TTTVisual {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (button.isEnabled()) {
+                            playRandomSound();
                             if (click % 2 == 0) {
                                 xo = 'O';
                             } else {
