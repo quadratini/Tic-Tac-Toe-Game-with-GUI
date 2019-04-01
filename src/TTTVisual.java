@@ -41,14 +41,14 @@ public class TTTVisual {
 
     public void addComponentsToPane(JPanel panel) {
         GridBagConstraints c = new GridBagConstraints();
-        c.insets = new Insets(2,2,2,2);
+        c.insets = new Insets(2, 2, 2, 2);
         buttons = new JButton[size][size];
 
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 JButton button = new JButton();
                 buttons[row][col] = button;
-                button.setPreferredSize(new Dimension(50,50));
+                button.setPreferredSize(new Dimension(50, 50));
                 c.gridx = row;
                 c.gridy = col;
                 panel.add(button, c);
@@ -73,16 +73,12 @@ public class TTTVisual {
                                 turn.setText("O's move");
                             }
                             button.setText(xo + "");
-                            board.set(r,co,xo);
+                            board.set(r, co, xo);
 
                             char win = board.winner();
-                            Color bambisEarlobe = new Color(196,157,131);
-                            Color toru = new Color(153,138,174);
-
-                            if (click == (size * size - 1)) { // FOR TIE
-                                panel.setBackground(Color.red);
-                                turn.setText("Draw");
-                            }
+                            Color bambisEarlobe = new Color(196, 157, 131);
+                            Color toru = new Color(153, 138, 174);
+                            
 
                             if (win != ' ') {
                                 if (win == 'X') {
@@ -119,7 +115,7 @@ public class TTTVisual {
         frame = new JFrame("Tic-Tac-Toe");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         sexImages = new ArrayList<>();
-        String[] gstrings = new String[] {
+        String[] gstrings = new String[]{
                 "good/sex-pleasedontclickonthislauren.jpg", "good/nothingsuspcisiou123.png", "good/talktothehandeatthefoot.png",
                 "good/4Head.png", "good/lookatthatnose.png", "good/nice_boat_42.png", "good/angelaanguyen.png", "good/captainmarvel.png",
                 "good/dirty_slut_spread.png"
@@ -128,7 +124,7 @@ public class TTTVisual {
             for (String s : gstrings) {
                 sexImages.add(ImageIO.read(new File("" + s)));
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -174,7 +170,7 @@ public class TTTVisual {
         c.gridy = 2;
         frame.add(reset, c);
 
-        frame.setSize(600,600);
+        frame.setSize(600, 600);
         frame.setVisible(true);
     }
 
@@ -184,7 +180,7 @@ public class TTTVisual {
             int timesIBanegedHer = 0;
 
             public void run() {//OHHHHH KSAIS MIT
-                while(true) {
+                while (true) {
                     int none = 0;
                     frame.setIconImage(sexImages.get(timesIBanegedHer % timesIBangedLoren + none));
                     ++timesIBanegedHer; //yes!!
