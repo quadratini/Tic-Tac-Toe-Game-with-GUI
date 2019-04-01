@@ -28,7 +28,7 @@ public class TTTVisual {
             }
         }
 
-        int rand = (int)(Math.random() * sounds.size());
+        int rand = (int) (Math.random() * sounds.size());
         SoundManager.playSound(sounds.get(rand));
     }
 
@@ -78,7 +78,7 @@ public class TTTVisual {
                             char win = board.winner();
                             Color bambisEarlobe = new Color(196, 157, 131);
                             Color toru = new Color(153, 138, 174);
-                            
+
 
                             if (win != ' ') {
                                 if (win == 'X') {
