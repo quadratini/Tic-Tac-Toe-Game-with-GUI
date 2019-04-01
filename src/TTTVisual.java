@@ -89,14 +89,16 @@ public class TTTVisual {
                                 } else if (win == 'O') {
                                     panel.setBackground(toru);
                                     turn.setText("O wins");
-                                } else if (click == (size * size - 1)) { // FOR TIE
-                                    panel.setBackground(Color.red);
-                                    turn.setText("Draw");
                                 }
                                 for (int i = 0; i < size; ++i) {
                                     for (int j = 0; j < size; ++j) {
                                         buttons[i][j].setEnabled(false);
                                     }
+                                }
+                            } else {
+                                if (click == (size * size - 1)) { // FOR TIE
+                                    panel.setBackground(Color.red);
+                                    turn.setText("Draw");
                                 }
                             }
                         }
@@ -157,6 +159,7 @@ public class TTTVisual {
             public void actionPerformed(ActionEvent e) {
                 for (int i = 0; i < size; ++i) {
                     for (int j = 0; j < size; ++j) {
+                        panel.setBackground(Color.white);
                         board.set(i, j, ' ');
                         buttons[i][j].setText(" ");
                         buttons[i][j].setEnabled(true);
