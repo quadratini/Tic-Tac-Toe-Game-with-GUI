@@ -36,7 +36,6 @@ public class TTTVisual {
         this.board = board;
         size = board.size();
         initFrame();
-        // now draw the board as buttons here
     }
 
     public void addComponentsToPane(JPanel panel) {
@@ -78,7 +77,6 @@ public class TTTVisual {
                             char win = board.winner();
                             Color bambisEarlobe = new Color(196, 157, 131);
                             Color toru = new Color(153, 138, 174);
-
 
                             if (win != ' ') {
                                 if (win == 'X') {
