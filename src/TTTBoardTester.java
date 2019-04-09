@@ -38,10 +38,6 @@ public class TTTBoardTester {
         b.set(0,2,'X');
         b.set(2,0,'X');
         b.set(1,2,'X');
-        for (int i = 0; i < 0; ++i) {
-            // doin it
-        }
-        // ur hotkeys are different than mine. ctrl K does nothing. TRASH ECLIPSE IS TRASH TRAAAAASH trash trash TRASH TRASH
         b.set(2,1,'X');
         b.set(1,3,'X');
         b.set(3,0,'X');

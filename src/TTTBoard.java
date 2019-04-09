@@ -103,11 +103,9 @@ public class TTTBoard {
                         return c;
                     }
         		}
-                // CC Cleaner
-                // CCleaner
             }
     		
-    		// Checks if same col winner. UR WRONG URU TRAAASH IT'S CCLEANER
+    		// Checks if same col winner.
     		for (int i = 0; i < size; i++) {
                 firstChar = get(0, i);
                 for (int j = 1; j < size; j++) {
@@ -118,7 +116,6 @@ public class TTTBoard {
         			if (c ==  ' ' || c == 0) {
                         break;
                     }
-        			// im sofa king we todd ed
         			if (j == size - 1) {
                         return c;
                     }
@@ -215,7 +212,7 @@ public class TTTBoard {
     }
     
     /**
-    * Sets character at given postiion unless it is out of range.
+    * Sets character at given position unless it is out of range.
     *
     * @throws IndexOutOfBoundsException if the position given is out of range.
     * @param r is the row of the character to be placed.
@@ -241,7 +238,7 @@ public class TTTBoard {
     /**
     * returns the character that won.
     *
-    * @return the character that won.K
+    * @return the character that won.
     */
     public char winner() {
 		return board.winner();
@@ -249,8 +246,7 @@ public class TTTBoard {
     
     /**
     * Prints the TTT board.
-    *3swftstrikes
-     * IT ALL HAPPENED SO FAST -bamboni
+    *
     * @return the TTT board.
     */
     public String toString() {
