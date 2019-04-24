@@ -9,12 +9,6 @@
 
 public class TTTAI {
 
-    /**
-     * Returns the amount of board space left.
-     *
-     * @param board reads in the board state.
-     * @return the amount of board space available.
-     */
     private static int getBoardSpaceCount(TTTBoard board) {
         int count = 0;
         for (int i = 0; i < board.size(); ++i) {
@@ -25,32 +19,18 @@ public class TTTAI {
         return count;
     }
 
-    /**
-     * Gets the position of the first opponent.
-     *
-     * @param board reads in the board.
-     * @param piece reads in the piece.
-     * @return position of first opponent.
-     * @throws Exception No opponent.
-     */
     private static int[] getFirstOpp(TTTBoard board, char piece) throws Exception {
         for (int i = 0; i < board.size(); ++i) {
             for (int j = 0; j < board.size(); ++j) {
                 char p = board.get(i, j);
                 if (p != ' ' && p != piece) {
-                    return new int[] { i, j };
+                    return new int[]{i, j};
                 }
             }
         }
         throw new Exception("doesnt have opponent");
     }
 
-    /**
-     * Returns the turn number.
-     *
-     * @param board gets state of the board.
-     * @return the board turn number.
-     */
     private static int getBoardTurnNumber(TTTBoard board) {
         return (board.size() * board.size() - getBoardSpaceCount(board) + 1);
     }
@@ -65,20 +45,24 @@ public class TTTAI {
      * @param piece piece for char.
      */
     public static void move(TTTBoard board, char piece) {
+        if (board.winner() != ' ') {
+            throw new IllegalArgumentException("Game Over");
+        }
         if (board.size() == 1) {
             board.set(0, 0, piece);
             return;
         }
         if (board.size() == 3) {
             int turnNumber = getBoardTurnNumber(board);
-            if (turnNumber == 1) { board.set(0, 0, piece);
-                return; }
-            else if (turnNumber == 2) {
+            if (turnNumber == 1) {
+                board.set(0, 0, piece);
+                return;
+            } else if (turnNumber == 2) {
                 if (board.get(1, 1) == ' ') {
                     board.set(1, 1, piece);
                     return;
                 } else if (board.get(0, 0) == ' ') {
-                    board.set(0,0, piece);
+                    board.set(0, 0, piece);
                     return;
                 }
             } else if (turnNumber == 3) {
@@ -131,7 +115,7 @@ public class TTTAI {
         oppC = 0;
         spaceC = 0;
         for (int i = 0; i < board.size(); ++i) {
-            int j =  board.size() - i - 1;
+            int j = board.size() - i - 1;
             char p = board.get(i, j);
             if (p == ' ') spaceC++;
             else if (p == piece) selfC++;
@@ -142,7 +126,7 @@ public class TTTAI {
         if (spaceC == 1 && (selfC == 0 || oppC == 0)) {
             // fill in that space
             for (int i = 0; i < board.size(); ++i) {
-                int j =  board.size() - i - 1;
+                int j = board.size() - i - 1;
                 char p = board.get(i, j);
                 if (p == ' ') {
                     board.set(i, j, piece);
@@ -175,12 +159,10 @@ public class TTTAI {
 
                 if (p == ' ') {
                     hasEmpty = true;
-                }
-                else if (p == piece) {
+                } else if (p == piece) {
                     containsSelf = true;
                     selfCount++;
-                }
-                else {
+                } else {
                     containsOpp = true;
                     oppCount++;
                 }
@@ -216,12 +198,10 @@ public class TTTAI {
 
                 if (p == ' ') {
                     hasEmpty = true;
-                }
-                else if (p == piece) {
+                } else if (p == piece) {
                     containsSelf = true;
                     selfCount++;
-                }
-                else {
+                } else {
                     containsOpp = true;
                     oppCount++;
                 }
@@ -281,10 +261,9 @@ public class TTTAI {
             if (selfInRowRows[board.size() - 1] == 0 &&
                     selfInRowCols[board.size() - 1] == 0 &&
                     oppInRowRows[board.size() - 1] == 0 &&
-                    oppInRowCols[board.size() - 1] == 0)
-            {
+                    oppInRowCols[board.size() - 1] == 0) {
                 if (turnNumber == 4) {
-                    if ((board.get(1, 1) != ' ' && board.get(1, 1) != piece )
+                    if ((board.get(1, 1) != ' ' && board.get(1, 1) != piece)
                             && (board.get(2, 2) != ' ' && board.get(2, 2) != piece)) {
                         board.set(2, 0, piece);
                         return;
@@ -366,21 +345,13 @@ public class TTTAI {
             int[] nextEmpty = getNextEmpty(board);
             board.set(nextEmpty[0], nextEmpty[1], piece);
         } catch (Exception e) {
-            throw new IllegalArgumentException("BOARD FULL / SOMEONE WON");
+            throw new IllegalArgumentException("DRAW / SOMEONE WON");
         }
     }
 
-    /**
-     * Checks row to find a winnable spot.
-     *
-     * @param board gets board state.
-     * @param inARow AI looks for it's own chars in a row.
-     * @param selfWinnableRows Checks for winnable rows.
-     * @param selfCountRows Counts how many char's of it's own is in a row.
-     * @return returns a move.
-     * @throws Exception something went wrong.
-     */
-    private static int getRowIndexForInRowRows(TTTBoard board, int inARow, boolean[] selfWinnableRows, int[] selfCountRows) throws Exception {
+    private static int getRowIndexForInRowRows(TTTBoard board, int inARow,
+                                               boolean[] selfWinnableRows,
+                                               int[] selfCountRows) throws Exception {
         for (int i = 0; i < board.size(); ++i) {
             // if not winnable find next
             if (!selfWinnableRows[i]) continue;
@@ -389,14 +360,6 @@ public class TTTAI {
         throw new Exception("uhoh");
     }
 
-    /**
-     * Looks for the next Row AI wants.
-     *
-     * @param board reads board state.
-     * @param targetRow The row AI wants to go in.
-     * @return row AI wants to go in.
-     * @throws Exception something went wrong.
-     */
     private static int getNextInRow(TTTBoard board, int targetRow) throws Exception {
         for (int i = 0; i < board.size(); ++i) {
             char p = board.get(targetRow, i);
@@ -405,14 +368,6 @@ public class TTTAI {
         throw new Exception("this bad");
     }
 
-    /**
-     * Finds column for AI.
-     *
-     * @param board gets board state.
-     * @param targetCol column AI wants to go in.
-     * @return the next column.
-     * @throws Exception something went wrong.
-     */
     private static int getNextInCol(TTTBoard board, int targetCol) throws Exception {
         for (int i = 0; i < board.size(); ++i) {
             char p = board.get(i, targetCol);
@@ -421,17 +376,10 @@ public class TTTAI {
         throw new Exception("this bad");
     }
 
-    /**
-     * Finds the next empty spot.
-     *
-     * @param board reads board.
-     * @return the next position.
-     * @throws Exception full board.
-     */
     private static int[] getNextEmpty(TTTBoard board) throws Exception {
         for (int i = 0; i < board.size(); ++i) {
             for (int j = 0; j < board.size(); ++j) {
-                if (board.get(i, j) == ' ') return new int[] { i, j };
+                if (board.get(i, j) == ' ') return new int[]{i, j};
             }
         }
         throw new Exception("bruh its full");
