@@ -1,70 +1,47 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.ArrayList;
 
 public class TTTVisual {
-    private ArrayList<Image> sexImages; //u know what it is
     private TTTBoard board;
     private JLabel turn;
     private JFrame frame;
-
-    public char getXO() {
-        return xo;
-    }
-
-    private char xo;
     private int size;
-    private int click = 0;
+    private char xo = 'X';
     private JButton[][] buttons;
-    private ArrayList<File> sounds;
 
     public void nextPlayer() {
-        if (xo == 'O') {
+        /*if (xo == 'O') {
             xo = 'X';
         } else {
             xo = 'O';
-        }
+        }*/
+        turn.setText("Your move");
+    }
 
-        if (xo == 'O') {
-            turn.setText("X's move");
-        } else {
-            turn.setText("O's move");
+    public int boardSpots() {
+        int spots = 0;
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board.size(); j++) {
+                if (board.get(j, i) == ' ') {
+                    spots++;
+                }
+            }
         }
+        return spots;
     }
 
     public void updateButtons() {
-        for (int i = 0; i < board.size(); ++i) {
-            for (int j = 0; j < board.size(); ++j) {
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board.size(); j++) {
                 char p = board.get(j, i);
                 buttons[i][j].setText(p + "");
                 if (p == ' ') {
                     buttons[i][j].setEnabled(true);
-                } else {
-                    buttons[i][j].setEnabled(false);
                 }
             }
         }
-    }
-
-    public JFrame getFrame() { return frame; }
-
-    private void playRandomSound() {
-        if (sounds == null) {
-            sounds = new ArrayList<>();
-            File dir = new File("good/sex");
-            for (File file : dir.listFiles()) {
-                if (file.getName().endsWith(".wav")) {
-                    sounds.add(file);
-                }
-            }
-        }
-
-        int rand = (int) (Math.random() * sounds.size());
-        SoundManager.playSound(sounds.get(rand));
     }
 
     public TTTVisual(TTTBoard board) {
@@ -82,7 +59,7 @@ public class TTTVisual {
             for (int col = 0; col < size; col++) {
                 JButton button = new JButton();
                 buttons[row][col] = button;
-                button.setPreferredSize(new Dimension(50, 50));
+                button.setPreferredSize(new Dimension(100, 100));
                 c.gridx = row;
                 c.gridy = col;
                 panel.add(button, c);
@@ -94,38 +71,46 @@ public class TTTVisual {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (button.isEnabled()) {
-                            playRandomSound();
                             nextPlayer();
                             button.setText(xo + "");
                             board.set(r, co, xo);
 
                             char win = board.winner();
-                            Color bambisEarlobe = new Color(196, 157, 131);
+                            Color pale = new Color(196, 157, 131);
                             Color toru = new Color(153, 138, 174);
 
+                            if (win == ' ') {
+                                TTTAI.move(board, 'O');
+                            }
+                            updateButtons();
+                            System.out.println(board);
+                            win = board.winner();
                             if (win != ' ') {
                                 if (win == 'X') {
-                                    panel.setBackground(bambisEarlobe);
-                                    turn.setText("X wins");
+                                    panel.setBackground(pale);
+                                    turn.setText("You won!");
                                 } else {
                                     panel.setBackground(toru);
-                                    turn.setText("O wins");
+                                    turn.setText("Sorry, the computer won!");
                                 }
-
                                 for (int i = 0; i < size; ++i) {
                                     for (int j = 0; j < size; ++j) {
                                         buttons[i][j].setEnabled(false);
                                     }
                                 }
                             } else {
-                                if (click == (size * size - 1)) { // FOR TIE
+                                if (boardSpots() == 0) { // FOR TIE
                                     panel.setBackground(Color.red);
-                                    turn.setText("Draw");
+                                    turn.setText("It's a draw!");
+                                    for (int i = 0; i < size; ++i) {
+                                        for (int j = 0; j < size; ++j) {
+                                            buttons[i][j].setEnabled(false);
+                                        }
+                                    }
                                 }
                             }
                         }
-                        click++;
-                        button.setEnabled(false);
+                        // button.setEnabled(false); //uncomment to play REAL tic-tac-toe
                     }
                 });
             }
@@ -134,29 +119,10 @@ public class TTTVisual {
 
     // draws the frame
     private void initFrame() {
-
         frame = new JFrame("Tic-Tac-Toe");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        sexImages = new ArrayList<>();
-        String[] gstrings = new String[]{
-                "good/sex-pleasedontclickonthislauren.jpg", "good/nothingsuspcisiou123.png", "good/talktothehandeatthefoot.png",
-                "good/4Head.png", "good/lookatthatnose.png", "good/nice_boat_42.png", "good/angelaanguyen.png", "good/captainmarvel.png",
-                "good/dirty_slut_spread.png"
-        };
-        try {
-            for (String s : gstrings) {
-                sexImages.add(ImageIO.read(new File("" + s)));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        JPanel panel = new JPanel(new GridBagLayout()) {
-            @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(400, 400);
-            }
-        };
+        JPanel panel = new JPanel(new GridBagLayout());
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 1;
@@ -173,12 +139,8 @@ public class TTTVisual {
         c.gridy = 0;
         turn.setFont(new Font(labelFont.getName(), Font.PLAIN, 20));
         frame.add(turn, c);
-        c.gridx = 0;
-        c.gridx = 2;
-
 
         c.gridx = 1;
-
         JButton reset = new JButton("Reset");
 
         nextPlayer();
@@ -191,38 +153,15 @@ public class TTTVisual {
                         board.set(i, j, ' ');
                         buttons[i][j].setText(" ");
                         buttons[i][j].setEnabled(true);
-                        xo = 'X';
-                        nextPlayer();
-                        click = 0;
                     }
                 }
             }
         });
         c.gridy = 2;
         frame.add(reset, c);
-
+        frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setSize(600, 600);
         frame.setVisible(true);
-    }
-
-    public void bangMeDaddySaidBamboozle() {
-        int timesIBangedLoren = sexImages.size();
-        Thread loop = new Thread() {
-            int timesIBanegedHer = 0;
-
-            public void run() {//OHHHHH KSAIS MIT
-                while (true) {
-                    int none = 0;
-                    frame.setIconImage(sexImages.get(timesIBanegedHer % timesIBangedLoren + none));
-                    ++timesIBanegedHer; //yes!!
-                    try {
-                        Thread.sleep(50);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-        loop.start();
     }
 }
