@@ -3,54 +3,34 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class TTTVisual {
+/**
+ * A class that initializes a GUI depending ont he size given.
+ * Good for a game of Tic-Tac-Toe. Reset button at the bottom
+ * to reset the game.
+ * Uses gridbag layout.
+ */
+public class TTTGUI {
     private TTTBoard board;
-    private JLabel turn;
-    private JFrame frame;
     private int size;
-    private char xo = 'X';
     private JButton[][] buttons;
+    private JLabel turn = new JLabel("Your move");
 
-    public void nextPlayer() {
-        /*if (xo == 'O') {
-            xo = 'X';
-        } else {
-            xo = 'O';
-        }*/
-        turn.setText("Your move");
-    }
-
-    public int boardSpots() {
-        int spots = 0;
-        for (int i = 0; i < board.size(); i++) {
-            for (int j = 0; j < board.size(); j++) {
-                if (board.get(j, i) == ' ') {
-                    spots++;
-                }
-            }
-        }
-        return spots;
-    }
-
-    public void updateButtons() {
-        for (int i = 0; i < board.size(); i++) {
-            for (int j = 0; j < board.size(); j++) {
-                char p = board.get(j, i);
-                buttons[i][j].setText(p + "");
-                if (p == ' ') {
-                    buttons[i][j].setEnabled(true);
-                }
-            }
-        }
-    }
-
-    public TTTVisual(TTTBoard board) {
+    /**
+     * A constructor for the TTTBoard.
+     * Initializes the frame.
+     *
+     * @param board takes in the TTT game board.
+     */
+    public TTTGUI(TTTBoard board) {
         this.board = board;
         size = board.size();
         initFrame();
     }
 
-    public void addComponentsToPane(JPanel panel) {
+    private void addComponentsToPane(JPanel panel) {
+        char user = 'X';
+        char computer = 'O';
+
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(2, 2, 2, 2);
         buttons = new JButton[size][size];
@@ -64,61 +44,19 @@ public class TTTVisual {
                 c.gridy = col;
                 panel.add(button, c);
 
-                int co = row;
-                int r = col;
+                ButtonActionListener button_pressed = new ButtonActionListener(board, turn, button,
+                        col, row, user,
+                        computer, buttons, size);
 
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (button.isEnabled()) {
-                            nextPlayer();
-                            button.setText(xo + "");
-                            board.set(r, co, xo);
-
-                            char win = board.winner();
-                            Color pale = new Color(196, 157, 131);
-                            Color toru = new Color(153, 138, 174);
-
-                            if (win == ' ') {
-                                TTTAI.move(board, 'O');
-                            }
-                            updateButtons();
-                            System.out.println(board);
-                            win = board.winner();
-                            if (win != ' ') {
-                                if (win == 'X') {
-                                    panel.setBackground(pale);
-                                    turn.setText("You won!");
-                                } else {
-                                    panel.setBackground(toru);
-                                    turn.setText("Sorry, the computer won!");
-                                }
-                                for (int i = 0; i < size; ++i) {
-                                    for (int j = 0; j < size; ++j) {
-                                        buttons[i][j].setEnabled(false);
-                                    }
-                                }
-                            } else {
-                                if (boardSpots() == 0) { // FOR TIE
-                                    panel.setBackground(Color.red);
-                                    turn.setText("It's a draw!");
-                                    for (int i = 0; i < size; ++i) {
-                                        for (int j = 0; j < size; ++j) {
-                                            buttons[i][j].setEnabled(false);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        // button.setEnabled(false); //uncomment to play REAL tic-tac-toe
-                    }
-                });
+                button.addActionListener(button_pressed);
             }
         }
     }
 
     // draws the frame
     private void initFrame() {
+        JFrame frame;
+
         frame = new JFrame("Tic-Tac-Toe");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -133,7 +71,6 @@ public class TTTVisual {
         frame.setLayout(new GridBagLayout());
         frame.add(panel, c);
 
-        turn = new JLabel();
         Font labelFont = turn.getFont();
 
         c.gridy = 0;
@@ -143,10 +80,10 @@ public class TTTVisual {
         c.gridx = 1;
         JButton reset = new JButton("Reset");
 
-        nextPlayer();
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                turn.setText("Your move");
                 for (int i = 0; i < size; ++i) {
                     for (int j = 0; j < size; ++j) {
                         panel.setBackground(Color.black);

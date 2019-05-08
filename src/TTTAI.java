@@ -69,8 +69,6 @@ public class TTTAI {
                 try {
                     int[] opp = getFirstOpp(board, piece);
                     int oppRow = opp[0];
-                    //int oppCol = opp[1];
-                    //System.out.println("wa");
                     if (oppRow == 0) {
                         board.set(2, 0, piece);
                         return;
